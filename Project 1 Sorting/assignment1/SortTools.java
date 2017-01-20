@@ -141,6 +141,29 @@ public class SortTools {
 
 	}
 
+	/**
+	  * This method sort array x using insertion sort
+	  * @param x is the array
+	  * @param n is the length of array x
+	  */
+
+	void insertSort(int[] x, int n){
+		for(int i = 1; i < n; i++){
+			int index_cur = i;
+			for(int y = i-1; y>= 0; y--){
+				
+				if(x[index_cur] > x[y])
+					break;
+				else if(x[y]>x[index_cur]){
+					int temp = x[y];
+					x[y] = x[index_cur];
+					x[index_cur]= temp;
+					index_cur = y;
+				}
+
+			}
+		}
+	}
 
 
 
