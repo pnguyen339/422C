@@ -17,8 +17,10 @@ public class SortTools {
 	  * @return true if array is sorted
 	  */
 	public static boolean isSorted(int[] x, int n) {
+		if(n == 1)
+			return true;
 		for(int i = 0; i<n-1; i++){
-			if(x[i]<=x[i+1])
+			if(x[i]>x[i+1])
 				return false;
 		
 		}	
@@ -31,9 +33,9 @@ public class SortTools {
 	  * @param v is the number needed to be find
 	  * @return the index where v is located
 	  */
-	public int find(int[] x, int n, int v){
+	public static int find(int[] x, int n, int v){
 		int lower = 0;
-		int higher = n;
+		int higher = n-1;
 		
 		while(lower!=higher){
 			if(lower+1 == higher){
@@ -60,7 +62,7 @@ public class SortTools {
 
 	/**
 	  * This method insert v into array x if array x do not contain v
-	  * retrun a copy
+	  * return a copy
 	  * @param x is the array
 	  * @param n is the length of array x
 	  * @param v is the value that ened to be insert	
@@ -69,13 +71,13 @@ public class SortTools {
 
 
 
-	public int[] insertGeneral(int[] x, int n, int v){
+	public static int[] insertGeneral(int[] x, int n, int v){
 		if(find(x,n,v) == -1){
 			int[] copy = new int[n+1];
 			int copy_index = 0;
 			int i;
 			for(i=0; i<= n;i++){
-				if(v<x[i] || i == n){
+				if(i == n || v<x[i]){
 					copy[copy_index] = v;
 					copy_index++;
 					break;	
@@ -109,13 +111,13 @@ public class SortTools {
 	  * This method insert v into array x if array x do not contain v
 	  * @param x is the array
 	  * @param n is the length of array x
-	  * @param v is the value that ened to be insert	
+	  * @param v is the value that need to be insert	
 	  * @return a modified array of x with v
 	  */
 
 
 
-	public int insertInPlace(int[] x, int n, int v){
+	public static int insertInPlace(int[] x, int n, int v){
 		if(find(x,n,v) == -1){
 			int copy = 0;
 			int i;
@@ -123,11 +125,12 @@ public class SortTools {
 				if(v<x[i] || i == n){
 					copy = x[i];
 					x[i] = v;
+					i++;
 					break;	
 				}
 			}
 			
-			while(i<n){
+			while(i<=n){
 				int copy2 = x[i];
 				x[i] = copy;
 				copy = copy2;	
@@ -147,7 +150,7 @@ public class SortTools {
 	  * @param n is the length of array x
 	  */
 
-	void insertSort(int[] x, int n){
+	public static void insertSort(int[] x, int n){
 		for(int i = 1; i < n; i++){
 			int index_cur = i;
 			for(int y = i-1; y>= 0; y--){
