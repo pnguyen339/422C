@@ -6,8 +6,15 @@
 package assignment1;
 public class Main {
 	public static void main(String [] args) {
-
-		// call your test methods here
-		// SortTools.isSorted() etc.
+		Tester foo = new Tester();
+		//foo.testIsSortedWithOneElement();
+		//foo.testIsSortedNegInOrder();
+		//foo.testFindFoundBeginning();
+		//foo.testFindFoundEnd();
+		//foo.testFindFoundFull();
+		//foo.testFindFoundPartial();
+		//foo.testInsertInPlaceFullBeginning();
+		//foo.testFindNotFoundPartial();
+		foo.testWorstCaseTime();
 	}
 }

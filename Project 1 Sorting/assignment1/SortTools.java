@@ -34,6 +34,8 @@ public class SortTools {
 	  * @return the index where v is located
 	  */
 	public static int find(int[] x, int n, int v){
+		if(n == 0)
+			return -1;
 		int lower = 0;
 		int higher = n-1;
 		
@@ -153,16 +155,13 @@ public class SortTools {
 	public static void insertSort(int[] x, int n){
 		for(int i = 1; i < n; i++){
 			int index_cur = i;
-			for(int y = i-1; y>= 0; y--){
-				
-				if(x[index_cur] > x[y])
-					break;
-				else if(x[y]>x[index_cur]){
-					int temp = x[y];
-					x[y] = x[index_cur];
-					x[index_cur]= temp;
-					index_cur = y;
-				}
+			int y = i-1;
+			while(y >=0 && (x[index_cur] < x[y])){
+				int temp = x[y];
+				x[y] = x[index_cur];
+				x[index_cur]= temp;
+				index_cur = y;
+				y--;
 
 			}
 		}
