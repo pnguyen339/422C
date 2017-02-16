@@ -5,7 +5,7 @@ public class Driver{
 
 	public static void main(String [] args){
 		Game master;
-		if(args == null)
+		if(args.length ==0)
 			master = new Game(false);
 		else
 			master = new Game(true);

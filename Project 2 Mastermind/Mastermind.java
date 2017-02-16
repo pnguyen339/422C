@@ -2,14 +2,15 @@
 import java.util.*;
 import java.lang.System;
 import java.lang.String;
+//package assignment2
 public class Mastermind implements Gameplay{
 	
-		private ArrayList<String> hist;
+		private ArrayList<String> hist = new ArrayList<String>();
 		private int NumPeg;
-		private boolean debug;
+		private static boolean debug;
 		private String secretCode;
 		private int numGuess;	
-		private ArrayList<String> colors;
+		private String[] colors;
 	
 
 	Mastermind(boolean i)
@@ -22,7 +23,7 @@ public class Mastermind implements Gameplay{
 		switch(i){
 			case 1: System.out.println("Welcome to Mastermind."); break;			
 			
-			case 2: System.out.println("You have " +numGuess+ " guess(es) left.");
+			case 2: System.out.println("\nYou have " +numGuess+ " guess(es) left.");
 					System.out.println("Enter your guess:"); break;
 		
 			case 3: System.out.println(s+" -> " + checkBlack(s) + "b_"+ checkWhite(s)+ "w"); break;
@@ -35,11 +36,11 @@ public class Mastermind implements Gameplay{
 
 			case 6: System.out.println("INVALID_GUESS"); break;
 
-			case 7: System.out.println("You win!"); break;
+			case 7: System.out.println("You win!\n"); break;
 			
 			case 8:	System.out.println("Do you want to play a new game? (Y/N)"); break;
 
-			case 9: System.out.println("You lose! The parttern was " + secretCode); break;
+			case 9: System.out.println("You lose! The parttern was " + secretCode+ "\n"); break;
 
 			case 10: System.out.println("Secret code: "+ secretCode); break;
 			default: break;
@@ -62,29 +63,56 @@ public class Mastermind implements Gameplay{
 		}
 		else
 		{
-			for(int i = 0; i < o.length(); i++)
+			boolean find =false;	
+			char[] charA = o.toCharArray();
+			for(int i = 0; i < charA.length-1; i++)
 			{
-					if(colors.contains(o.charAt(i)))
-					{	
-						output(6,null);
-						return false;
+				for(int g =0;g< colors.length; g++)
+				{		
+					if(colors[g].compareTo(Character.toString(charA[i]))==0)
+					{
+						find = true;	
 					}
+				}
 			}
-			return true;
+			if(!find)
+			{
+				output(6,null);
+				return find;
+			}
+			else
+				return find;
 		}
 	}
 
 	private int checkWhite(String temp)
 	{	
 		int count = 0;
-		for(int i =0; i<temp.length(); i++){
+		for(int i =0; i<temp.length(); i++)
+		{
+			
+			char[] charA = temp.toCharArray();
 			for(int y=0; y<secretCode.length(); y++){
 				if(i!=y && temp.charAt(i) == secretCode.charAt(y))
-					count++;
+				{
+					if(charA[i] != 0)
+					{
+						charA[i] = 0;
+						count++;
+						break;
+					}
+				}
+
 			}
 		}
-		return count;
-
+		
+		int i = checkBlack(temp);
+		if(count-i >= 0)	
+		{
+			return count -i;
+		}
+		else
+			return 0;
 	}
 
 	private int checkBlack(String temp)
@@ -106,23 +134,29 @@ public class Mastermind implements Gameplay{
 
 	}
 	
-	public void play(){
+	private void setup(){
 		GameConfiguration config = new GameConfiguration();
-		Scanner sc = new Scanner(System.in);
 		NumPeg = config.pegNumber;
 		secretCode = SecretCodeGenerator.getInstance().getNewSecretCode();
-		colors = new ArrayList<String>(Arrays.asList(config.colors));
+		colors = config.colors;
 		numGuess= config.guessNumber;
-
+		if(!hist.isEmpty())
+			hist.clear();
+		if(debug)
+				output(10,null);
+	}
+	
+	public void play(){
+		
+		Scanner sc = new Scanner(System.in);
 		output(1,null);
 		output(8,null);
 		String x = getUserInput(sc);
 		boolean finishGame = false;		
-		
+		setup();
 		if(x.compareTo("Y")==0	)
 		{
-			if(debug)
-				output(10,null);
+			
 			
 			while(!finishGame)		
 			{					
@@ -131,7 +165,9 @@ public class Mastermind implements Gameplay{
 					x=getUserInput(sc);
 				}while(!isValid(x));
 				
+				hist.add(x);					
 				output(3,x);
+				
 				if(checkBlack(x) == NumPeg)
 				{
 					finishGame = true;
@@ -140,9 +176,7 @@ public class Mastermind implements Gameplay{
 					if(getUserInput(sc).compareTo("Y")==0)
 					{	
 						finishGame =false;
-						secretCode = SecretCodeGenerator.getInstance().getNewSecretCode();
-						if(debug)
-							output(10,null);
+						setup();
 
 					}
 				}
@@ -157,9 +191,7 @@ public class Mastermind implements Gameplay{
 					if(getUserInput(sc).compareTo("Y")==0)
 					{
 						finishGame =false;
-						secretCode = SecretCodeGenerator.getInstance().getNewSecretCode();
-						if(debug)
-							output(10,null);
+						setup();
 
 					}
 				}

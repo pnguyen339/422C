@@ -3,7 +3,7 @@ import java.util.*;
 
 
 public class Game{
-	Mastermind ga;
+	private Mastermind ga;
 	Game(boolean i){
 		ga = new Mastermind(i);
 	}
