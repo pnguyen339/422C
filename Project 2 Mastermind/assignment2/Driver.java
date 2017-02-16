@@ -1,0 +1,28 @@
+/* EE422C Project 2 (Mastermind) 
+ * Peter Nguyen
+ * ppn229
+ * Slip days used: <0>
+ * Spring 2017
+ */
+
+
+package assignment2;
+import java.util.*;
+//import assignment2.Game;
+public class Driver{
+
+	public static void main(String [] args){
+		Game master;
+		if(args.length ==0)
+			master = new Game(false);
+		else
+			master = new Game(true);
+		
+		master.runGame();
+
+
+
+	}
+
+
+}

@@ -5,10 +5,12 @@
  * Spring 2017
  */
 
+package assignment2;
+//import GameConfiguration;
+//import parent.*;
 import java.util.*;
 import java.lang.System;
 import java.lang.String;
-package assignment2;
 public class Mastermind implements Gameplay{
 	
 		private ArrayList<String> hist = new ArrayList<String>();

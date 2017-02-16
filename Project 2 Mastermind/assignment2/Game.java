@@ -4,13 +4,14 @@
  * Slip days used: <0>
  * Spring 2017
  */
-import java.util.*;
-package assignment2;
 
+package assignment2;
+import java.util.*;
 
 public class Game{
 	private Mastermind ga;
-	Game(boolean i){
+	
+	public Game(boolean i){
 		ga = new Mastermind(i);
 	}
 
