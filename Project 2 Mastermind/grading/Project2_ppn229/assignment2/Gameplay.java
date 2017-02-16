@@ -4,7 +4,7 @@
  * Slip days used: <0>
  * Spring 2017
  */
-package assigment2;
+package assignment2;
 import java.util.*;
 public interface Gameplay{
 
