@@ -10,7 +10,8 @@ package assignment2;
 
 public class Game{
 	private Mastermind ga;
-	Game(boolean i){
+	Game(){
+		boolean i =false;
 		ga = new Mastermind(i);
 	}
 
