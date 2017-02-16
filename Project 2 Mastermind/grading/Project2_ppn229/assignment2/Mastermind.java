@@ -1,8 +1,14 @@
+/* EE422C Project 2 (Mastermind) 
+ * Peter Nguyen
+ * ppn229
+ * Slip days used: <0>
+ * Spring 2017
+ */
 
 import java.util.*;
 import java.lang.System;
 import java.lang.String;
-//package assignment2
+package assignment2;
 public class Mastermind implements Gameplay{
 	
 		private ArrayList<String> hist = new ArrayList<String>();
