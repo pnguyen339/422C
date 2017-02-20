@@ -1,7 +1,7 @@
 
 
 import java.util.Random;
-
+import assignment2.Mastermind;
 public class SecretCodeGenerator {
 	private static SecretCodeGenerator instance = new SecretCodeGenerator();
 	public static SecretCodeGenerator getInstance() { return instance; }
