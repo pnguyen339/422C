@@ -19,6 +19,7 @@ import java.io.*;
 
 public class Main {
 	
+	public static HashMap<String, Node> graph;
 	// static variables and constants only here.
 	
 	public static void main(String[] args) throws Exception {
@@ -35,7 +36,13 @@ public class Main {
 			ps = System.out;			// default to Stdout
 		}
 		initialize();
-		
+		while(true) {
+			ArrayList<String> arguments = parse(kb);
+			if (arguments.get(0) == "/quit") {
+				break;
+			}
+			printLadder(getWordLadderBFS(arguments.get(0), arguments.get(1)));
+		}
 		// TODO methods to read in words, output ladder
 	}
 	
@@ -43,36 +50,125 @@ public class Main {
 		// initialize your static variables or constants here.
 		// We will call this method before running our JUNIT tests.  So call it 
 		// only once at the start of main.
+		Set<String> dict = makeDictionary();
+		graph = new HashMap<String, Node>();
+		for (String s : dict) {
+			Node node = new Node(s);
+			for (int i = 0; i < s.length(); i++) {
+				for (char c = 'A'; c <= 'Z'; c++) {
+					char[] temp = s.toCharArray();
+					temp[i] = c;
+					String test = String.valueOf(temp);
+					if (test != s && dict.contains(test)) {
+						node.edges.add(test.toLowerCase());
+						node.edgeNo++;
+					}
+				}
+			}
+			graph.put(s.toLowerCase(), node);
+		}
 	}
 	
 	/**
 	 * @param keyboard Scanner connected to System.in
-	 * @return ArrayList of 2 Strings containing start word and end word. 
+	 * @return ArrayList of Strings containing start word, rungs, and end word. 
 	 * If command is /quit, return empty ArrayList. 
 	 */
 	public static ArrayList<String> parse(Scanner keyboard) {
 		// TO DO
-		return null;
+		ArrayList<String> arguments = new ArrayList<String>();
+		String first = keyboard.next();
+		arguments.add(first);
+		if (first != "/quit") {
+			String second = keyboard.nextLine();
+			arguments.add(second);
+		}
+		return arguments;
 	}
 	
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
 		
+		reset();
 		// Returned list should be ordered start to end.  Include start and end.
-		// Return empty list if no ladder.
+		// If ladder is empty, return list with just start and end.
 		// TODO some code
-		Set<String> dict = makeDictionary();
+		//Set<String> dict = makeDictionary();
 		// TODO more code
+		
+		/* start at start node from start string
+		 * position ++
+		 * recursively call a function that checks the [position - 1]th edge on the list
+		 * check for word in function
+		 * set parent, if already parent pop back to next one
+		 * do so until position == EdgeNO
+		 * check all edges or until word is found
+		 */
 		
 		return null; // replace this line later with real return
 	}
 	
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
 		
+    	reset();
 		// TODO some code
-		Set<String> dict = makeDictionary();
+		//Set<String> dict = makeDictionary();
 		// TODO more code
+    	
+    	Queue queue = new Queue();
+    	Node first = graph.get(start);
+    	first.parent = start;
+    	for (int i = 0; i < first.edgeNo; i++) {
+    		Node toQueue = graph.get(first.edges.get(i));
+    		toQueue.parent = start;
+    		queue.enqueue(toQueue);
+    	}
+    	while (queue.length != 0) {
+    		Node check = queue.firstNode();
+    		if (check.word == end) {
+    			break;
+    		}
+    		for (int k = 0; k < check.edgeNo; k++) {
+    			Node toQueue2 = graph.get(check.edges.get(k));
+    			if (toQueue2.parent.equals("")) {
+    				toQueue2.parent = check.word;
+    				queue.enqueue(toQueue2);
+    			}
+    		}
+    	}
+    	Node last = graph.get(end);
+    	if (last.parent == "") {
+    		ArrayList<String> notPossible = new ArrayList<String>();
+    		notPossible.add("0");
+    		notPossible.add(start);
+    		notPossible.add(end);
+    		return notPossible;
+    	}
+    	else {
+    		Node insert = last;
+    		int length = 0;
+    		ArrayList<String> possible = new ArrayList<String>();
+    		while (!(insert.parent.equals(insert.word))) {
+    			possible.add(0, insert.word);
+    			length++;
+    			insert = graph.get(insert.parent);
+    		}
+    		possible.add(0, insert.word);
+    		length++;
+    		possible.add(0, String.valueOf(length));
+    		return possible;
+    	}
+    	/* set start node from start string 
+    	 * set all the nodes in edge list to parent this start
+    	 * queue all the nodes in the edges 
+    	 * check first entry in queue if it is the one
+    	 * if not set edge list parents to this node, for those without parents
+    	 * queue edges
+    	 * dequeue first entry in queue
+    	 * repeat until queue is empty or the thing is found
+    	 * 
+    	 */
 		
-		return null; // replace this line later with real return
+		//return null; // replace this line later with real return
 	}
     
 	public static Set<String>  makeDictionary () {
@@ -92,8 +188,25 @@ public class Main {
 	}
 	
 	public static void printLadder(ArrayList<String> ladder) {
-		
+		if (ladder.get(0).equals("0")) {
+			System.out.println("no word ladder can be found between " + ladder.get(1) + " and " + ladder.get(2));
+			System.out.println(ladder.get(1));
+			System.out.println(ladder.get(2));
+		}
+		else{
+			int number = Integer.valueOf(ladder.get(0));
+			int length = number - 2;
+			System.out.println("a " + length + "-rung ladder exists between " + ladder.get(1) + " and " + ladder.get(number));
+			for (int i = 1; i <= number; i++) {
+				System.out.println(ladder.get(i));
+			}
+		}
 	}
 	// TODO
 	// Other private static methods here
+	private static void reset() {
+		for (Node n : graph.values()) {
+			n.reset();
+		}
+	}
 }
