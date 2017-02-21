@@ -44,15 +44,11 @@ public class Main {
 			else if (arguments.get(1).equals("/quit")) {
 				break;
 			}
-			printLadder(getWordLadderBFS(arguments.get(0), arguments.get(1)));
+			printLadder(getWordLadderDFS(arguments.get(0), arguments.get(1)));
 		}
-		// TODO methods to read in words, output ladder
 	}
 	
 	public static void initialize() {
-		// initialize your static variables or constants here.
-		// We will call this method before running our JUNIT tests.  So call it 
-		// only once at the start of main.
 		Set<String> dict = makeDictionary();
 		graph = new HashMap<String, Node>();
 		for (String s : dict) {
@@ -78,7 +74,6 @@ public class Main {
 	 * If command is /quit, return empty ArrayList. 
 	 */
 	public static ArrayList<String> parse(Scanner keyboard) {
-		// TO DO
 		ArrayList<String> arguments = new ArrayList<String>();
 		String first = keyboard.next().trim();
 		arguments.add(first);
@@ -92,22 +87,9 @@ public class Main {
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
 		
 		reset();
-		// Returned list should be ordered start to end.  Include start and end.
-		// If ladder is empty, return list with just start and end.
-		// TODO some code
-		//Set<String> dict = makeDictionary();
-		// TODO more code
-		
-		/* start at start node from start string
-		 * position ++
-		 * recursively call a function that checks the [position - 1]th edge on the list
-		 * check for word in function
-		 * set parent, if already parent pop back to next one
-		 * do so until position == EdgeNO
-		 * check all edges or until word is found
-		 */
-		
-		return null; // replace this line later with real return
+		Node first = graph.get(start);
+		DFS(first, first, end);
+		return listSet(start, end);
 	}
 	
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
@@ -136,23 +118,7 @@ public class Main {
     		}
     		queue.dequeue();
     	}
-    	Node last = graph.get(end);
-    	if (last.parent.equals("")) {
-    		ArrayList<String> notPossible = new ArrayList<String>();
-    		notPossible.add(start);
-    		notPossible.add(end);
-    		return notPossible;
-    	}
-    	else {
-    		Node insert = last;
-    		ArrayList<String> possible = new ArrayList<String>();
-    		while (!(insert.parent.equals(insert.word))) {
-    			possible.add(0, insert.word);
-    			insert = graph.get(insert.parent);
-    		}
-    		possible.add(0, insert.word);
-    		return possible;
-    	}
+    	return listSet(start,end);
 	}
     
 	public static Set<String>  makeDictionary () {
@@ -190,6 +156,44 @@ public class Main {
 	private static void reset() {
 		for (Node n : graph.values()) {
 			n.reset();
+		}
+	}
+	
+	private static ArrayList<String> listSet(String start, String end) {
+		Node last = graph.get(end);
+    	if (last.parent.equals("")) {
+    		ArrayList<String> notPossible = new ArrayList<String>();
+    		notPossible.add(start);
+    		notPossible.add(end);
+    		return notPossible;
+    	}
+    	else {
+    		Node insert = last;
+    		ArrayList<String> possible = new ArrayList<String>();
+    		while (!(insert.parent.equals(insert.word))) {
+    			possible.add(0, insert.word);
+    			insert = graph.get(insert.parent);
+    		}
+    		possible.add(0, insert.word);
+    		return possible;
+    	}
+	}
+	
+	private static boolean DFS(Node m, Node n, String test) {
+		if (!n.parent.equals("")) {
+			return false;
+		}
+		else {
+			n.parent = m.word;
+			if (n.word.equals(test)) {
+				return true;
+			}
+			boolean check = false;
+			while (n.position < n.edgeNo && check == false) {
+				check = DFS(n, graph.get(n.edges.get(n.position)), test);
+				n.position++;
+			}
+			return check;
 		}
 	}
 }

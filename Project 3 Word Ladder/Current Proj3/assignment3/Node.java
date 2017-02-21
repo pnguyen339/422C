@@ -6,7 +6,7 @@ public class Node {
 	public ArrayList<String> edges;
 	public String parent;
 	public int edgeNo;
-	int position;
+	public int position;
 	
 	Node(String s){
 		word = s.toLowerCase();
