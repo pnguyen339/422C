@@ -19,8 +19,7 @@ import java.io.*;
 
 public class Main {
 	
-	public static HashMap<String, Node> graph;
-	// static variables and constants only here.
+	public static HashMap<String, Node> graph; //graph constructed from the dictionary
 	
 	public static void main(String[] args) throws Exception {
 		
@@ -48,6 +47,11 @@ public class Main {
 		}
 	}
 	
+	/** initialize
+	 * @param none
+	 * @return none
+	 * Calls makeDictionary and creates the dictionary graph from the returned dict. 
+	 */
 	public static void initialize() {
 		Set<String> dict = makeDictionary();
 		graph = new HashMap<String, Node>();
@@ -68,7 +72,7 @@ public class Main {
 		}
 	}
 	
-	/**
+	/** parse
 	 * @param keyboard Scanner connected to System.in
 	 * @return ArrayList of Strings containing start word, rungs, and end word. 
 	 * If command is /quit, return empty ArrayList. 
@@ -84,6 +88,11 @@ public class Main {
 		return arguments;
 	}
 	
+	/** getWordLadderDFS
+	 * @param none
+	 * @return ArrayList of word ladder words
+	 * resets the graph, conducts a depth first search and returns a ladder if found 
+	 */
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
 		
 		reset();
@@ -92,6 +101,12 @@ public class Main {
 		return listSet(start, end);
 	}
 	
+	/** getWordLadderBFS
+	 * @param none
+	 * @return ArrayList of word ladder words
+	 * resets the graph, conducts a breadth first search and returns a ladder if found
+	 * utilizes a queue for checking nodes 
+	 */
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
 		
     	reset();
@@ -137,11 +152,15 @@ public class Main {
 		return words;
 	}
 	
+	/** printLadder
+	 * @param word ladder ArrayList
+	 * @return none
+	 * prints the inputted word ladder, including how long the ladder is
+	 * if no ladder exists (ie given ladder length = 2), prints no ladder can be found
+	 */
 	public static void printLadder(ArrayList<String> ladder) {
 		if (ladder.size() == 2) {
 			System.out.println("no word ladder can be found between " + ladder.get(0) + " and " + ladder.get(1));
-			//System.out.println(ladder.get(0));
-			//System.out.println(ladder.get(1));
 		}
 		else{
 			int number = ladder.size();
@@ -151,14 +170,24 @@ public class Main {
 			}
 		}
 	}
-	// TODO
-	// Other private static methods here
+
+	/** reset
+	 * @param none
+	 * @return none
+	 * calls the node reset function on every node in the graph to reset the graph
+	 */
 	private static void reset() {
 		for (Node n : graph.values()) {
 			n.reset();
 		}
 	}
 	
+	/** listSet
+	 * @param Strings start word, end word
+	 * @return word ladder ArrayList
+	 * after search is finished, and a path has been found (or not found),
+	 * creates the word ladder arrayList from the graph entries/marked path.
+	 */
 	private static ArrayList<String> listSet(String start, String end) {
 		Node last = graph.get(end);
     	if (last.parent.equals("")) {
@@ -179,6 +208,45 @@ public class Main {
     	}
 	}
 	
+	/** optimize
+	 * @param arrayList of edges, String end word
+	 * @return new edge ArrayList
+	 * sorts the edge arrayList by putting the words that are closest to the
+	 * end word at the beginning of the ArrayList to optimize the DFS
+	 */
+	private static ArrayList<String> optimize(ArrayList<String> a, String check) {
+		ArrayList<Integer> sames = new ArrayList<Integer>();
+		for (int i = 0; i < a.size(); i++) {
+			int same = 0;
+			for (int j = 0; j < check.length(); j++) {
+				if (a.get(i).charAt(j) == check.charAt(j)) {
+					same++;
+				}
+			}
+			sames.add(same);
+		}
+		for (int k = 1; k < a.size(); k++) {
+			for (int m = k; m > 0; m--) {
+				if (sames.get(m) > sames.get(m-1)) {
+					String temps = a.get(m);
+					int tempi = sames.get(m);
+					a.set(m, a.get(m-1));
+					sames.set(m, sames.get(m-1));
+					a.set(m-1, temps);
+					sames.set(m-1, tempi);
+				}
+			}
+		}
+		return a;
+	}
+	
+	/** DFS
+	 * @param Node m (parent), n (to be modified), String end word
+	 * @return boolean true if word is found, false otherwise
+	 * recursively calls self to conduct a DFS, uses the true and false booleans
+	 * to aid with going back from nodes. While loop determines which node to
+	 * check next.
+	 */
 	private static boolean DFS(Node m, Node n, String test) {
 		if (!n.parent.equals("")) {
 			return false;
@@ -188,6 +256,7 @@ public class Main {
 			if (n.word.equals(test)) {
 				return true;
 			}
+			n.edges = optimize(n.edges, test);
 			boolean check = false;
 			while (n.position < n.edgeNo && check == false) {
 				check = DFS(n, graph.get(n.edges.get(n.position)), test);

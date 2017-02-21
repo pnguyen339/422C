@@ -17,10 +17,12 @@ public class Queue {
 			n = a;
 		}
 		
+		//sets pointer to next element in queue
 		void nextSet(Entry e) {
 			next = e;
 		}
 		
+		//sets pointer to previous element in queue
 		void prevSet(Entry e) {
 			prev = e;
 		}
@@ -36,6 +38,7 @@ public class Queue {
 		length = 0;
 	}
 	
+	//adds node n to the queue
 	void enqueue(Node n) {
 		Entry add = new Entry(n);
 		last.prev.nextSet(add);
@@ -45,14 +48,14 @@ public class Queue {
 		length++;
 	}
 	
+	//removes first element from queue
 	void dequeue() {
 		first.nextSet(first.next.next);
-		//delete first.next.prev;
-		//wrap pointers?
 		first.next.prevSet(first);
 		length--;
 	}
 	
+	//returns the Node at the front of the queue
 	Node firstNode() {
 		return first.next.n;
 	}
