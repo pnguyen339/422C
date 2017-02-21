@@ -38,7 +38,10 @@ public class Main {
 		initialize();
 		while(true) {
 			ArrayList<String> arguments = parse(kb);
-			if (arguments.get(0) == "/quit") {
+			if (arguments.get(0).equals("/quit")) {
+				break;
+			}
+			else if (arguments.get(1).equals("/quit")) {
 				break;
 			}
 			printLadder(getWordLadderBFS(arguments.get(0), arguments.get(1)));
@@ -59,7 +62,7 @@ public class Main {
 					char[] temp = s.toCharArray();
 					temp[i] = c;
 					String test = String.valueOf(temp);
-					if (test != s && dict.contains(test)) {
+					if (!test.equals(s) && dict.contains(test)) {
 						node.edges.add(test.toLowerCase());
 						node.edgeNo++;
 					}
@@ -77,10 +80,10 @@ public class Main {
 	public static ArrayList<String> parse(Scanner keyboard) {
 		// TO DO
 		ArrayList<String> arguments = new ArrayList<String>();
-		String first = keyboard.next();
+		String first = keyboard.next().trim();
 		arguments.add(first);
-		if (first != "/quit") {
-			String second = keyboard.nextLine();
+		if (!first.equals("/quit")) {
+			String second = keyboard.next().trim();
 			arguments.add(second);
 		}
 		return arguments;
@@ -110,10 +113,7 @@ public class Main {
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
 		
     	reset();
-		// TODO some code
-		//Set<String> dict = makeDictionary();
-		// TODO more code
-    	
+
     	Queue queue = new Queue();
     	Node first = graph.get(start);
     	first.parent = start;
@@ -124,7 +124,7 @@ public class Main {
     	}
     	while (queue.length != 0) {
     		Node check = queue.firstNode();
-    		if (check.word == end) {
+    		if (check.word.equals(end)) {
     			break;
     		}
     		for (int k = 0; k < check.edgeNo; k++) {
@@ -134,41 +134,25 @@ public class Main {
     				queue.enqueue(toQueue2);
     			}
     		}
+    		queue.dequeue();
     	}
     	Node last = graph.get(end);
-    	if (last.parent == "") {
+    	if (last.parent.equals("")) {
     		ArrayList<String> notPossible = new ArrayList<String>();
-    		notPossible.add("0");
     		notPossible.add(start);
     		notPossible.add(end);
     		return notPossible;
     	}
     	else {
     		Node insert = last;
-    		int length = 0;
     		ArrayList<String> possible = new ArrayList<String>();
     		while (!(insert.parent.equals(insert.word))) {
     			possible.add(0, insert.word);
-    			length++;
     			insert = graph.get(insert.parent);
     		}
     		possible.add(0, insert.word);
-    		length++;
-    		possible.add(0, String.valueOf(length));
     		return possible;
     	}
-    	/* set start node from start string 
-    	 * set all the nodes in edge list to parent this start
-    	 * queue all the nodes in the edges 
-    	 * check first entry in queue if it is the one
-    	 * if not set edge list parents to this node, for those without parents
-    	 * queue edges
-    	 * dequeue first entry in queue
-    	 * repeat until queue is empty or the thing is found
-    	 * 
-    	 */
-		
-		//return null; // replace this line later with real return
 	}
     
 	public static Set<String>  makeDictionary () {
@@ -188,16 +172,15 @@ public class Main {
 	}
 	
 	public static void printLadder(ArrayList<String> ladder) {
-		if (ladder.get(0).equals("0")) {
-			System.out.println("no word ladder can be found between " + ladder.get(1) + " and " + ladder.get(2));
-			System.out.println(ladder.get(1));
-			System.out.println(ladder.get(2));
+		if (ladder.size() == 2) {
+			System.out.println("no word ladder can be found between " + ladder.get(0) + " and " + ladder.get(1));
+			//System.out.println(ladder.get(0));
+			//System.out.println(ladder.get(1));
 		}
 		else{
-			int number = Integer.valueOf(ladder.get(0));
-			int length = number - 2;
-			System.out.println("a " + length + "-rung ladder exists between " + ladder.get(1) + " and " + ladder.get(number));
-			for (int i = 1; i <= number; i++) {
+			int number = ladder.size();
+			System.out.println("a " + (number-2) + "-rung ladder exists between " + ladder.get(0) + " and " + ladder.get(number-1));
+			for (int i = 0; i < number; i++) {
 				System.out.println(ladder.get(i));
 			}
 		}

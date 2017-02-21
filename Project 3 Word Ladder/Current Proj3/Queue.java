@@ -45,7 +45,7 @@ public class Queue {
 		length++;
 	}
 	
-	void dequeue(Node n) {
+	void dequeue() {
 		first.nextSet(first.next.next);
 		//delete first.next.prev;
 		//wrap pointers?
