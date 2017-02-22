@@ -88,6 +88,17 @@ public class Main {
 	}
 	
 	/** getWordLadderDFS
+	 * Our DFS utilizes a function DFS that recursively calls itself to try to find the
+	 * end word. The DFS function has two parameters, the node to be modified, and its
+	 * parent. It checks to see if a node is visited by checking the parent field, and 
+	 * if it has not, it sets the parent field. Then sorts the edges field by checking
+	 * which edges have more letters in common with the target final word, and searches
+	 * those branches first. If the function eventually returns false, then that means
+	 * the target word was not found in that branch and signifies the need to call along
+	 * another edge/branch, or if the entire function returns false there is no ladder
+	 * at the end of all of the recursion. Returning true means that the word was found
+	 * and it stops further needless recursive calls. The position field in the nodes
+	 * keeps track of which branches have already been explored.
 	 * @param none
 	 * @return ArrayList of word ladder words
 	 * resets the graph, conducts a depth first search and returns a ladder if found 
@@ -101,6 +112,16 @@ public class Main {
 	}
 	
 	/** getWordLadderBFS
+	 * Our BFS algorithm starts from the Node containing the start word and places all of
+	 * its children in a queue. Then it checks the first entry in the queue to see if it
+	 * is the end word. If not, it places all of the children of that node in the queue. 
+	 * This way, all nodes of distance 1 will be checked before nodes of distance 2, etc.
+	 * When each node is checked, the parent node it came from before is set as the parent
+	 * field. This doubles as a visited flag. The BFS continues until the queue is empty
+	 * (no path) or the end word is found. Then to return the array, we check the parent
+	 * field of the end node. If it is blank, there is no path. If there is a parent, we
+	 * insert the String word field of the node into the ArrayList, and then the parent 
+	 * before that, and the parents of the parents, etc. until we reach the start node.
 	 * @param none
 	 * @return ArrayList of word ladder words
 	 * resets the graph, conducts a breadth first search and returns a ladder if found

@@ -18,8 +18,8 @@ public class Node {
 	public String word;
 	public ArrayList<String> edges;
 	public String parent; //doubles as a "visited flag"
-	public int edgeNo;
-	public int position; //for use in DFS, picking which edge to go to
+	public int edgeNo; //number of edges
+	public int position; //for use in DFS, picking which edge to go to, keeps track of visited branches
 	
 	//Constructor from string
 	Node(String s){
