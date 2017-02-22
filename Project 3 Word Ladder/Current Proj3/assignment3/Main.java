@@ -1,14 +1,13 @@
 /* WORD LADDER Main.java
  * EE422C Project 3 submission by
- * Replace <...> with your actual data.
- * <Student1 Name>
- * <Student1 EID>
- * <Student1 5-digit Unique No.>
- * <Student2 Name>
- * <Student2 EID>
- * <Student2 5-digit Unique No.>
+ * Bryan Yao
+ * byy77
+ * 16225
+ * Peter Nguyen
+ * ppn229
+ * 16225
  * Slip days used: <0>
- * Git URL:
+ * Git URL: https://github.com/pnguyen339/422C/tree/master/Project%203%20Word%20Ladder/Current%20Proj3
  * Spring 2017
  */
 
