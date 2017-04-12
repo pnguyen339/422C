@@ -1,4 +1,12 @@
-// Insert header here
+/* MULTITHREADING <BookingClient.java>
+ * EE422C Project 6 submission by
+ * Peter Nguyen
+ * ppn229
+ * <Student1 5-digit Unique No.>
+ * Slip days used: <0>
+ * Spring 2017
+ */
+
 package assignment6;
 
 import java.util.ArrayList;
@@ -9,19 +17,22 @@ import java.lang.Thread;
 
 public class BookingClient {
 
-  public static void main(String args[]){  
-    	Theater publicTheater = new Theater(1,1,"Ouija");
-    	Map<String, Integer> office = new HashMap<String, Integer>();
-    	office.put("BX1", 3);
-    	office.put("BX3", 3);
-    	office.put("BX2", 4);
-    	office.put("BX5", 3);
-    	office.put("BX4", 3);
-    	BookingClient newClient = new BookingClient(office, publicTheater);
-  	List<Thread> th = newClient.simulate();
-  }  
-  
 
+
+  public static void main(String args[]){  
+    Theater publicTheater = new Theater(3,5,"Ouija");
+    Map<String, Integer> office = new HashMap<String, Integer>();
+    office.put("BX1", 3);
+    office.put("BX3", 3);
+    office.put("BX2", 4);
+    office.put("BX5", 3);
+    office.put("BX4", 3);
+    BookingClient newClient = new BookingClient(office, publicTheater);
+    @SuppressWarnings("unused")
+	List<Thread> th = newClient.simulate();
+
+
+  }  
   /*
    * @param office maps box office id to number of customers in line
    * @param theater the theater where the show is playing
@@ -75,8 +86,7 @@ public class BookingClient {
 	      sys = i;
 	    }
 	
-	       
-	    public void run() {
+	    public synchronized void bookit() {
 	    	int numCust = this.sys.getOff().get(this.name);
 	    	while(numCust > 0 ){
 	    		  Theater.Seat nextBest = this.sys.getTheater().bestAvailableSeat();
@@ -100,6 +110,10 @@ public class BookingClient {
 			      numCust--;
 			    
 		     }
+	    	
+	    }
+	    public void run() {
+	    	bookit();
 	    }
 	
   }
