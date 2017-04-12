@@ -5,30 +5,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import assignment6.Theater.Seat;
-import assignment6.Theater.Ticket;
-
 import java.lang.Thread;
 
 public class BookingClient {
 
-
-
   public static void main(String args[]){  
-    Theater publicTheater = new Theater(3,5,"Ouija");
-    Map<String, Integer> office = new HashMap<String, Integer>();
-    office.put("BX1", 3);
-    office.put("BX3", 3);
-    office.put("BX2", 4);
-    office.put("BX5", 3);
-    office.put("BX4", 3);
-    BookingClient newClient = new BookingClient(office, publicTheater);
-    @SuppressWarnings("unused")
-	List<Thread> th = newClient.simulate();
-
-
+    	Theater publicTheater = new Theater(1,1,"Ouija");
+    	Map<String, Integer> office = new HashMap<String, Integer>();
+    	office.put("BX1", 3);
+    	office.put("BX3", 3);
+    	office.put("BX2", 4);
+    	office.put("BX5", 3);
+    	office.put("BX4", 3);
+    	BookingClient newClient = new BookingClient(office, publicTheater);
+  	List<Thread> th = newClient.simulate();
   }  
+  
+
   /*
    * @param office maps box office id to number of customers in line
    * @param theater the theater where the show is playing
@@ -82,15 +75,14 @@ public class BookingClient {
 	      sys = i;
 	    }
 	
-	    public synchronized void bookit() {
-	    	
-	    }
+	       
 	    public void run() {
 	    	int numCust = this.sys.getOff().get(this.name);
 	    	while(numCust > 0 ){
-		    	  Seat nextBest = this.sys.getTheater().bestAvailableSeat();
+	    		  Theater.Seat nextBest = this.sys.getTheater().bestAvailableSeat();
 			      if(nextBest != null){
-			        Ticket custTicket = this.sys.getTheater().printTicket(name, nextBest, this.sys.getTheater().getNumPeople() +1);
+			    	this.sys.getTheater().getNumPeople();
+			        Theater.Ticket custTicket = this.sys.getTheater().printTicket(name, nextBest, this.sys.getTheater().getNumPeople() +1);
 			        if(custTicket != null)
 			        	System.out.print(custTicket.toString());
 			        try {
@@ -99,8 +91,11 @@ public class BookingClient {
 					}
 			      }
 			      else {
-			    	System.out.printf("Sorry, we are sold out!");  
-			    	return;
+			    	if(this.sys.getTheater().getSoldOut() == false) {
+			    		System.out.printf("Sorry, we are sold out!");
+			    		this.sys.getTheater().SoldOut();
+			    		return;
+			    	}
 			      }
 			      numCust--;
 			    

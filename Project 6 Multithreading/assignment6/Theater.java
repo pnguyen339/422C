@@ -15,7 +15,7 @@ public class Theater {
 
 		public Seat(int rowNum, int seatNum) {
 			this.rowNum = rowNum;
-			this.seatNum = seatNum;
+			this.seatNum = seatNum+1;
 		}
 
 		public int getSeatNum() {
@@ -32,15 +32,26 @@ public class Theater {
 			ArrayList<Integer> stringRow = new ArrayList<Integer>();
 			int temp = rowNum;
 			
+			int temp2 = 0;
+			temp2 = (temp %26);
+			stringRow.add(temp2);
+			temp /=26;
+			
 			while(temp > 0){
-				int temp2 = temp %26;
-				stringRow.add(temp2);
-				temp = temp /26;
+				
+				temp2 = temp %26;
+				stringRow.add(temp2-1);
+				temp = temp-(temp2*26);
+				
+				
 			}
+			
+			
 			for(int i = stringRow.size() -1 ; i >= 0; i--) {
-				if(stringRow.get(i) != 0) {
-					row += (char)( 64+ stringRow.get(i));				}
+				
+					row += (char)( 65 + stringRow.get(i));	
 			}
+			
 
 			row += seatNum;
 			return row;
@@ -139,6 +150,7 @@ public class Theater {
 	private int seatsPerRow;
 	private ArrayList<Ticket> purchaseLog = new ArrayList<Ticket>();
 	private int numPeople = 0;
+	boolean soldOut = false;
 	
 	public Theater(int nRows, int sPerRow, String show) {
 		showName = show;
@@ -154,14 +166,15 @@ public class Theater {
    */
 	public Seat bestAvailableSeat() {
 		if(totalSeats > 0) {
-			int nextBestSeat = purchaseLog.size()+1;
-			int nextAvailableRows = 1;
-
+			int nextBestSeat = purchaseLog.size();
+			int nextAvailableRows = 0;
+			nextAvailableRows = (nextBestSeat/this.seatsPerRow);
+			nextBestSeat = (nextBestSeat%this.seatsPerRow);
 			
-			while(nextBestSeat > this.seatsPerRow) {
-				nextBestSeat -= this.seatsPerRow;
-				nextAvailableRows += 1;
-			}
+//			while(nextBestSeat > this.seatsPerRow) {
+//				nextBestSeat -= this.seatsPerRow;
+//				nextAvailableRows += 1;
+//			}
 
 			Seat newSeat = new Seat(nextAvailableRows, nextBestSeat);
 			this.totalSeats--;
@@ -183,10 +196,14 @@ public class Theater {
 		Ticket newTicket = new Ticket(this.showName,boxOfficeId,seat,client);
 		for(int i = 0; i < purchaseLog.size(); i++) {
 			Ticket each = purchaseLog.get(i);
-			Seat taken = each.getSeat();
-			if(taken.getRowNum() == seat.getRowNum() && taken.getSeatNum() == seat.getSeatNum()){
-				return null;
+			Seat taken;
+			if(each != null) {
+				taken = each.getSeat();
+				if(taken.getRowNum() == seat.getRowNum() && taken.getSeatNum() == seat.getSeatNum()){
+					return null;
+				}
 			}
+			
 		}
 		this.purchaseLog.add(newTicket);
 		this.numPeople++;
@@ -205,5 +222,12 @@ public class Theater {
 	
 	public int getNumPeople() {
 		return this.numPeople;
+	}
+	
+	public boolean getSoldOut(){
+		return soldOut;
+	}
+	public void SoldOut(){
+		soldOut = true;
 	}
 }
