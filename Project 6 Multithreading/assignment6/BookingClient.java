@@ -1,12 +1,4 @@
-/* MULTITHREADING <BookingClient.java>
- * EE422C Project 6 submission by
- * Peter Nguyen
- * ppn229
- * <Student1 5-digit Unique No.>
- * Slip days used: <0>
- * Spring 2017
- */
-
+// Insert header here
 package assignment6;
 
 import java.util.ArrayList;
@@ -70,7 +62,7 @@ public class BookingClient {
 		}
 
 		for(Thread each : runningThread) {
-			each.start();
+			each.run();
 		}
 
 		return runningThread;
@@ -96,7 +88,7 @@ public class BookingClient {
 			        if(custTicket != null)
 			        	System.out.print(custTicket.toString());
 			        try {
-						Thread.sleep(500);
+			        	Thread.sleep(50);
 					} catch (InterruptedException e) {
 					}
 			      }
@@ -113,7 +105,9 @@ public class BookingClient {
 	    	
 	    }
 	    public void run() {
-	    	bookit();
+	    	synchronized(sys.getTheater()){
+	    		bookit();
+	    	}
 	    }
 	
   }
